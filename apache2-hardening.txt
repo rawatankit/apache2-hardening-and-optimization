@@ -1,0 +1,17 @@
+APACHE Hardening
+vi /etc/apache2/00-default.conf
+Header always set Strict-Transport-Security "max-age=63072000;includeSubDomains"
+Header always append X-Frame-Options SAMEORIGIN
+Header set X-XSS-Protection 1;mode=block
+Header always set X-Content-Type-Options "nosniff" Header edit Set-Cookie ^(.*)$ $1;HttpsOnly;Secure
+## PASTE ALL ABOVE HEADERS ON default.ssl.conf too ServerTokens Prod
+ServerSignature Off // on apache2.conf
+<Directory /var/www/>
+#Options Indexes FollowSymLinks Options FollowSymLinks AllowOverride None Require all granted
+</Directory>
+FileETag None // on apache2.conf
+TraceEnable off // on apache2.conf
+SSLProtocol -ALL -TLSv1 +TLSv1.1 +TLSv1.2
+SSLHonorCipherOrder on SSLCipherSuite
+ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+//on default.ssl.conf
